@@ -14,10 +14,10 @@ and `assets/vm/`.
 
 One immutable directory per image build:
 
-- `v1/ocaml-state.bin.zst`: zstd-compressed post-boot snapshot
+- `vN/ocaml-state.bin.zst`: zstd-compressed post-boot snapshot
   (downloaded by every visitor at click-to-boot, ~9 MB).
-- `v1/ocaml-fs.json`: 9p filesystem metadata.
-- `v1/ocaml-rootfs-flat/`: content-addressed zstd chunk store
+- `vN/ocaml-fs.json`: 9p filesystem metadata.
+- `vN/ocaml-rootfs-flat/`: content-addressed zstd chunk store
   (~153 MB on disk; visitors fetch only the chunks their commands
   touch, ~12-53 MB per session).
 
@@ -25,7 +25,15 @@ The three artifacts in a directory MUST come from the same rootfs
 build; never mix versions. The course-side component pins one
 directory, so adding `v2/` never breaks deployed pages.
 
-## Versions in v1 (built 2026-06-02)
+## Version log
+
+### v2 (built 2026-06-02; current)
+
+- As v1, plus opam libraries `ounit2` and `qcheck` (module 9's
+  testing libraries); the `morse` sample's tests are now a real
+  OUnit2 suite.
+
+### v1 (built 2026-06-02)
 
 - Base: `i386/alpine:3.23`; OCaml 5.4.0 (bytecode), dune 3.20.2.
 - bisect_ppx: pinned to aantron/bisect_ppx PR #448 head `7061d64`
