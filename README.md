@@ -7,8 +7,9 @@ lazy chunks to the in-browser v86 emulator for the NPTEL course
 
 This repo holds only the built, student-downloadable VM data,
 served via GitHub Pages. The build tooling, design notes, and the
-terminal component live in the course repo under `tools/vm-image/`
-and `assets/vm/`.
+terminal component live in the course repo:
+<https://github.com/fplaunchpad/ocaml_nptel> (directories
+`tools/vm-image/` and `assets/vm/` there, not here).
 
 ## Layout
 
@@ -39,11 +40,17 @@ directory, so adding `v2/` never breaks deployed pages.
 - bisect_ppx: pinned to aantron/bisect_ppx PR #448 head `7061d64`
   (ppxlib >= 0.36 / OCaml 5.4 port).
 - Sample projects: `hello`, `morse`, `bowling`.
-- Built by `tools/vm-image/` at course-repo commit `fd3ac60`.
+- Built by the course repo's `tools/vm-image/` at commit
+  [`fd3ac60`](https://github.com/fplaunchpad/ocaml_nptel/commit/fd3ac60).
 
 ## Rebuilding
 
-In the course repo (needs Docker, node, python3 + zstandard, zstd):
+All paths below are inside a clone of the course repo
+(<https://github.com/fplaunchpad/ocaml_nptel>), not this one.
+Requirements: Docker, node, python3 with the `zstandard` module,
+and the `zstd` CLI. The first command creates `_vm-prototype/`, an
+untracked scratch directory at the course repo's root that holds
+the pinned third-party inputs and all build outputs.
 
 ```sh
 bash tools/vm-image/setup-scratch.sh
@@ -55,6 +62,6 @@ node tools/vm-image/run-workflow.mjs   # must print "workflow complete"
 ```
 
 Then copy `ocaml-rootfs-flat/`, `ocaml-state.bin.zst`, and
-`ocaml-fs.json` into a NEW `vN/` directory here, update this
-README's version log, and point the course-side component at the
-new directory.
+`ocaml-fs.json` from `_vm-prototype/images/` into a NEW `vN/`
+directory in THIS repo, update the version log above, and bump
+`DEFAULT_BASE` in the course repo's `assets/vm/vm-terminal.js`.
