@@ -28,7 +28,15 @@ directory, so adding `v2/` never breaks deployed pages.
 
 ## Version log
 
-### v2 (built 2026-06-02; current)
+### v3 (built 2026-06-02; current)
+
+- As v2, plus: bowling's instrumented `_build` is pre-baked (the
+  first `dune runtest --instrument-with bisect_ppx` drops from
+  ~90 s to ~20 s; the ppx-driver link dominates and is cached),
+  and fast-writeback sysctls (`vm.dirty_*_centisecs = 200`) so
+  freshly written guest files reach the 9p backend promptly.
+
+### v2 (built 2026-06-02)
 
 - As v1, plus opam libraries `ounit2` and `qcheck` (module 9's
   testing libraries); the `morse` sample's tests are now a real
