@@ -28,7 +28,16 @@ directory, so adding `v2/` never breaks deployed pages.
 
 ## Version log
 
-### v3 (built 2026-06-02; current)
+### v4 (built 2026-06-04; current)
+
+- As v3, plus the `streak` sample project: the M09-L03 coverage
+  demo built on `longest_streak` (the lecture's own glass-box
+  example) shipped with a deliberately partial test suite, so
+  `bisect-ppx-report summary` shows `5/6 (83.33%)` with one red
+  branch (the adjacent-run case) for the student to chase to
+  `6/6`. Its instrumented `_build` is pre-baked like bowling's.
+
+### v3 (built 2026-06-02)
 
 - As v2, plus: bowling's instrumented `_build` is pre-baked (the
   first `dune runtest --instrument-with bisect_ppx` drops from
