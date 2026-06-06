@@ -28,7 +28,22 @@ directory, so adding `v2/` never breaks deployed pages.
 
 ## Version log
 
-### v4 (built 2026-06-04; current)
+### v5 (built 2026-06-06; current)
+
+- As v4, plus the `m10` sample directory for Module 10 (memory
+  safety): six small, deliberately unsafe C programs plus a
+  `Makefile`, built and run in the terminal so students watch real
+  memory bugs misbehave. `uaf.c` (use-after-free, stale read),
+  `deleted_check.c` (UB-driven miscompile: the signed-overflow
+  guard is deleted by default and restored with `-fwrapv`),
+  `overflow.c` (stack buffer overflow: corrupts a neighbour, then
+  segfaults), `uninit.c` (uninitialised read), `heartbleed_mini.c`
+  (buffer over-read leaking an adjacent secret), and `race.c` (a
+  data race; it does not lose updates under single-core v86
+  emulation). gcc is already present via the OCaml toolchain; no
+  new packages.
+
+### v4 (built 2026-06-04)
 
 - As v3, plus the `streak` sample project: the M09-L03 coverage
   demo built on `longest_streak` (the lecture's own glass-box
