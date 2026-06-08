@@ -13,22 +13,34 @@ terminal component live in the course repo:
 
 ## Layout
 
-One immutable directory per image build:
+A single directory, `current/`, holds the live image data; each
+build overwrites it. Earlier builds are not kept as directories;
+git history is the rollback path.
 
-- `vN/ocaml-state.bin.zst`: zstd-compressed post-boot snapshot
+- `current/ocaml-state.bin.zst`: zstd-compressed post-boot snapshot
   (downloaded by every visitor at click-to-boot, ~9 MB).
-- `vN/ocaml-fs.json`: 9p filesystem metadata.
-- `vN/ocaml-rootfs-flat/`: content-addressed zstd chunk store
+- `current/ocaml-fs.json`: 9p filesystem metadata.
+- `current/ocaml-rootfs-flat/`: content-addressed zstd chunk store
   (~153 MB on disk; visitors fetch only the chunks their commands
   touch, ~12-53 MB per session).
 
-The three artifacts in a directory MUST come from the same rootfs
-build; never mix versions. The course-side component pins one
-directory, so adding `v2/` never breaks deployed pages.
+The three artifacts MUST come from the same rootfs build; never mix
+builds. The chunk files are content-addressed (sha256 names), so
+they cache forever; only `ocaml-fs.json` and `ocaml-state.bin.zst`
+sit at a stable URL and are revalidated by ETag when a build
+changes them.
 
-## Version log
+(`v5/` is a transitional leftover from the old per-build `vN/`
+scheme, kept only until the deployed course site is repointed at
+`current/`; it will be removed then.)
 
-### v6 (built 2026-06-08; current)
+## Changelog
+
+Informational only; each build overwrites `current/`, and git
+history is canonical. The `vN` labels below are historical, from
+the retired immutable-directory scheme.
+
+### current/ (built 2026-06-08)
 
 - As v5, with the `m10/heartbleed_mini.c` demo restructured to
   mirror the real OpenSSL handler: a `receive_heartbeat` function
@@ -103,7 +115,9 @@ zstd -19 -f _vm-prototype/images/ocaml-state.bin \
 node tools/vm-image/run-workflow.mjs   # must print "workflow complete"
 ```
 
-Then copy `ocaml-rootfs-flat/`, `ocaml-state.bin.zst`, and
-`ocaml-fs.json` from `_vm-prototype/images/` into a NEW `vN/`
-directory in THIS repo, update the version log above, and bump
-`DEFAULT_BASE` in the course repo's `assets/vm/vm-terminal.js`.
+Then overwrite `current/` in THIS repo with `ocaml-rootfs-flat/`,
+`ocaml-state.bin.zst`, and `ocaml-fs.json` from
+`_vm-prototype/images/`, add a dated changelog entry above, and
+commit (git history is the rollback path). `DEFAULT_BASE` in the
+course repo's `assets/vm/vm-terminal.js` points at `current/` and
+does not change per build.
