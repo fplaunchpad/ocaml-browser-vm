@@ -28,7 +28,17 @@ directory, so adding `v2/` never breaks deployed pages.
 
 ## Version log
 
-### v5 (built 2026-06-06; current)
+### v6 (built 2026-06-08; current)
+
+- As v5, with the `m10/heartbleed_mini.c` demo restructured to
+  mirror the real OpenSSL handler: a `receive_heartbeat` function
+  parses a request buffer (type byte, 2-byte length, payload) and
+  echoes `payload_len` bytes back, trusting the attacker's length
+  without checking it against the bytes received, so the copy reads
+  past the payload into an adjacent secret. Same bug, same output
+  shape; only the source layout changed. No new packages.
+
+### v5 (built 2026-06-06)
 
 - As v4, plus the `m10` sample directory for Module 10 (memory
   safety): six small, deliberately unsafe C programs plus a
